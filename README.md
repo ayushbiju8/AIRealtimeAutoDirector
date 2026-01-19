@@ -21,6 +21,16 @@ AutoDirector is an automated video production system that acts as a real-time vi
   - **Per-Camera Audio**: Associates specific microphones with specific cameras (e.g., Laptop Mic -> Host, Phone Mic -> Guest).
   - Detects voice activity stats to drive switching logic.
 
+- **💾 Session Recording & Analysis**:
+  - **Director's Cut**: Automatically saves the final output stream to `output/recording_TIMESTAMP.avi`.
+  - **Session Reports**: Generates a rich text summary (`_report.txt`) detailing speaking percentages, dominant emotions, and participant presence.
+
+- **🎛️ Control Panel GUI**:
+  - Modern Dark Theme interface built with **PyQt6**.
+  - Real-time parameter tuning (Sensitivity, Reaction Time, etc.).
+  - Visual Feedback for face detection and audio levels.
+  - Built-in **Recordings Manager** to replay sessions.
+
 ## 🛠️ Installation
 
 1.  **Clone the repository**:
@@ -32,7 +42,7 @@ AutoDirector is an automated video production system that acts as a real-time vi
 2.  **Install Dependencies**:
     You need Python installed. Then run:
     ```bash
-    pip install opencv-python numpy sounddevice
+    pip install opencv-python numpy sounddevice PyQt6
     ```
     *(Note: You might need PortAudio installed on your system for `sounddevice`)*
 
@@ -41,10 +51,10 @@ AutoDirector is an automated video production system that acts as a real-time vi
 
 ## ⚙️ Configuration
 
-Open `main.py` to configure your setup in the `CAMERA_CONFIG` section:
+Open `engine.py` (inside the `DirectorEngine` class) to configure your setup in the `CAMERA_CONFIG` section:
 
 ```python
-CAMERA_CONFIG = {
+self.CAMERA_CONFIG = {
     0: {
         "role": "HOST", 
         "mic_patterns": ["Realtek", "Array", "Intel"]   # Keywords for Laptop Mic
@@ -58,24 +68,28 @@ CAMERA_CONFIG = {
 
 - **Keys (0, 1)**: The Camera Index (Standard OpenCV camera ID).
 - **role**: Display name for the HUD (e.g., HOST, GUEST).
-- **mic_patterns**: List of keywords to identify the correct microphone for this camera. The system scans available devices and picks the first match.
+- **mic_patterns**: List of keywords to identify the correct microphone for this camera. The system scans available devices and picks the first match (prioritizing MME drivers on Windows).
 
 ## 🚀 Usage
 
-Run the main script:
+Run the main script to launch the Control Panel:
 ```bash
 python main.py
 ```
 
-### Controls
-- **`q`**: Quit the application.
-- **`c`**: Force manual camera switch (override Director temporarily).
+### Controls (GUI)
+- **Start**: Initializes the AI Engine and begins recording.
+- **Stop**: Stops the session and saves the video/report.
+- **Tuning Sliders**: Adjust AI behavior in real-time.
+- **Recordings**: Click any file in the "Recordings" list to open it.
 
 ## 📁 Project Structure
 
-- **`main.py`**: Entry point. initializes cameras, audio, and the main loop.
+- **`main.py`**: Entry point. Launches the `gui_app`.
+- **`gui_app.py`**: The PyQt6 Control Panel interface.
+- **`engine.py`**: The backend coordinator. Handles device scanning, recording, and the main loop.
 - **`fusion/director.py`**: The "Brain". Contains the logic for switching decisions.
-- **`visionai/face_detect.py`**: Handles face detection using OpenCV High-Level API.
-- **`audioai/vad.py`**: Voice Activity Detection wrapper around `sounddevice`.
+- **`visionai/`**: Face Detection & Emotion Analysis.
+- **`audioai/`**: Voice Activity Detection.
 - **`capture/`**: Helper classes for Camera and Audio input.
 

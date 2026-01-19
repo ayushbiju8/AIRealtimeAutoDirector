@@ -22,15 +22,16 @@ It connects to multiple cameras and microphones, detects who is speaking using a
 
 ### Graphical User Interface (GUI)
 - **PyQt6**: Used to build the modern, "Premium Dark Theme" Control Panel. This allows users to:
-  - Start/Stop the backend engine.
+  - Start/Stop the backend engine and recording.
   - Enable/Disable specific cameras and microphones.
   - Tune AI parameters (Reaction Time, Silence Hold, Audio Sensitivity) in real-time.
   - Visualize active devices and their status.
+  - **Recordings Manager**: Browse and play back saved sessions and view session reports.
 
 ### Architecture & Modules
-- **`engine.py`**: The core backend engine that orchestrates the data flow between devices and the AI logic.
+- **`engine.py`**: The core backend engine that orchestrates the data flow, configures devices, and manages the recording loop.
 - **`gui_app.py`**: The frontend control panel for user interaction.
-- **`fusion/director.py`**: The "Brain" of the system, containing the state machine and logic for switching decisions (e.g., determining the "Active Speaker").
+- **`fusion/director.py`**: The "Brain" of the system, containing the state machine and logic for switching decisions.
 - **`visionai/`**: detailed computer vision logic (Face Detection wrappers).
 - **`audioai/`**: Audio processing logic (Voice Activity Detection - VAD).
 - **`capture/`**: Hardware abstraction layer for Camera and Microphone inputs.
@@ -40,4 +41,6 @@ It connects to multiple cameras and microphones, detects who is speaking using a
 - **Per-Camera Audio Association**: Links specific microphones to specific camera angles (e.g., Host Mic -> Host Cam).
 - **Smooth Auto-Zoom**: "Cinematic" smooth panning and zooming to keep the speaker centered without digital jerkiness.
 - **Reaction Shots**: Automatically cuts to a listening participant during long pauses to keep the video dynamic.
+- **Session Recording**: Automaticaly records the Director's Cut to `.avi` files in the `output/` directory.
+- **Session Analysis**: Generates a detailed text report (`_report.txt`) for each session, summarizing speaking time, participant presence, and emotional tone.
 - **System Audio Priority**: Prioritizes "MME" drivers on Windows to ensure compatibility with other running audio software.
