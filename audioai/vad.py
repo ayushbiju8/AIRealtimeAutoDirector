@@ -7,24 +7,31 @@ class VoiceActivityDetector:
         self,
         sample_rate=16000,
         chunk_duration=0.03,
-        speech_threshold=0.05,
+        speech_threshold=1,
         speech_frames_required=4,
+        silence_hold_time=0.8, # Seconds to hold "speaking" state after silence
         device_index=None
     ):
         self.sample_rate = sample_rate
         self.chunk_duration = chunk_duration
         self.speech_threshold = speech_threshold
         self.speech_frames_required = speech_frames_required
+        self.silence_hold_time = silence_hold_time
         self.device_index = device_index
 
         self.current_volume = 0.0
         self.speech_counter = 0
         self.is_speaking = False
+        
+        # Silence hold logic
+        self.last_speech_time = 0
+        import time
+        self.time_module = time
 
         self.running = False
         self.stream = None
 
-    def _audio_callback(self, indata, frames, time, status):
+    def _audio_callback(self, indata, frames, time_info, status):
         if status:
             print(status)
 
@@ -36,7 +43,17 @@ class VoiceActivityDetector:
         else:
             self.speech_counter = max(0, self.speech_counter - 1)
 
-        self.is_speaking = self.speech_counter >= self.speech_frames_required
+        currently_speaking = self.speech_counter >= self.speech_frames_required
+        
+        if currently_speaking:
+            self.is_speaking = True
+            self.last_speech_time = self.time_module.time()
+        else:
+            # Check if we are within the hold time
+            if self.time_module.time() - self.last_speech_time < self.silence_hold_time:
+                self.is_speaking = True
+            else:
+                self.is_speaking = False
 
     def start(self):
         if self.running:

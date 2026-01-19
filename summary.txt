@@ -1,0 +1,43 @@
+
+# 🎬 AutoDirector: Intelligent AI Camera Switcher & Director
+
+## 🎯 Project Motive
+The **AutoDirector** project aims to democratize professional video production by creating an automated, AI-powered system that acts as a real-time virtual director. In a typical multi-camera setup (e.g., podcasts, interviews, streaming), switching between camera angles manually requires a dedicated person and constant attention. AutoDirector solves this by intelligently automating the entire process.
+
+It connects to multiple cameras and microphones, detects who is speaking using advanced audio analysis, tracks their faces, and automatically switches the video feed to focus on the active speaker. It mimics the decision-making of a human director by executing reaction shots during silence, preventing rapid jarring cuts (anti-flicker), and ensuring the visual composition is always engaging with features like auto-zoom and smooth panning.
+
+## 🛠️ Tools & Technologies Used
+
+### Core Language
+- **Python**: The primary programming language used for the entire application logic.
+
+### Computer Vision & AI
+- **OpenCV (`opencv-python`)**: Used for all image processing tasks, including capturing video feeds, resizing, cropping, and drawing overlays.
+- **YuNet Face Detection**: A fast and accurate face detection model (via OpenCV's DNN module) used to locate speakers within the video frame for tracking and auto-zoom.
+- **NumPy**: used for efficient numerical array manipulation, essential for image and audio data processing.
+
+### Audio Processing
+- **SoundDevice**: Used for querying audio devices, managing audio streams, and capturing raw microphone input in real-time.
+- **PortAudio**: The underlying audio I/O library used by SoundDevice (implied dependency).
+
+### Graphical User Interface (GUI)
+- **PyQt6**: Used to build the modern, "Premium Dark Theme" Control Panel. This allows users to:
+  - Start/Stop the backend engine.
+  - Enable/Disable specific cameras and microphones.
+  - Tune AI parameters (Reaction Time, Silence Hold, Audio Sensitivity) in real-time.
+  - Visualize active devices and their status.
+
+### Architecture & Modules
+- **`engine.py`**: The core backend engine that orchestrates the data flow between devices and the AI logic.
+- **`gui_app.py`**: The frontend control panel for user interaction.
+- **`fusion/director.py`**: The "Brain" of the system, containing the state machine and logic for switching decisions (e.g., determining the "Active Speaker").
+- **`visionai/`**: detailed computer vision logic (Face Detection wrappers).
+- **`audioai/`**: Audio processing logic (Voice Activity Detection - VAD).
+- **`capture/`**: Hardware abstraction layer for Camera and Microphone inputs.
+
+## ✨ Key Features
+- **Intelligent Switching**: Cuts to the speaker immediately but handles interruptions gracefully.
+- **Per-Camera Audio Association**: Links specific microphones to specific camera angles (e.g., Host Mic -> Host Cam).
+- **Smooth Auto-Zoom**: "Cinematic" smooth panning and zooming to keep the speaker centered without digital jerkiness.
+- **Reaction Shots**: Automatically cuts to a listening participant during long pauses to keep the video dynamic.
+- **System Audio Priority**: Prioritizes "MME" drivers on Windows to ensure compatibility with other running audio software.

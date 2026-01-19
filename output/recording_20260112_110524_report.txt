@@ -1,0 +1,21 @@
+AutoDirector Session Summary
+==========================
+Date: 2026-01-12 11:05:24
+Duration: 24.95 seconds
+
+Participant Statistics
+----------------------
+
+[Camera 0 - HOST]
+  - Max Persons Detected: 2
+  - Speaking Activity: 99.2% of session
+  - Observed Emotions:
+    * Happy: 52.5%
+    * Neutral: 47.5%
+
+[Camera 1 - GUEST]
+  - Max Persons Detected: 3
+  - Speaking Activity: 99.2% of session
+  - Observed Emotions:
+    * Neutral: 55.7%
+    * Happy: 44.3%

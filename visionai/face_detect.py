@@ -18,13 +18,14 @@ class FaceDetector:
             top_k=5000
         )
         self.input_size_set = False
+        self.last_input_size = None
 
     def detect(self, frame):
         h, w, _ = frame.shape
         # Input size needs to be set once or if dimensions change. 
-        # For simplicity, we can set it if it hasn't been set, or always set it.
-        # FaceDetectorYN requires input size to match the frame size.
-        self.detector.setInputSize((w, h))
+        if self.last_input_size != (w, h):
+            self.detector.setInputSize((w, h))
+            self.last_input_size = (w, h)
         
         _, faces = self.detector.detect(frame)
         return faces
